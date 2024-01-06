@@ -73,13 +73,13 @@ jobs:
             # Configure (windows)
             - name: Configure
               shell: msys2 {0}
-              run: ./config
+              run: ./config --no-asm --no-shared
               if: matrix.os == 'windows-latest'
 
             # Configure (linux/macos)
             - name: Configure
               shell: bash
-              run: ./config
+              run: ./config --no-asm --no-shared
               if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
             
             # Make (windows)
