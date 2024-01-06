@@ -33,6 +33,7 @@ jobs:
               with:
                 owner: openssl
                 repo: openssl
+                token: ${{ secrets.GITHUB_TOKEN }}
                 excludes: prerelease, draft
 
             # Checks out the repository
@@ -100,6 +101,7 @@ jobs:
               with:
                 owner: h3rald
                 repo: openssl-build
+                token: ${{ secrets.GITHUB_TOKEN }}
                 excludes: release
 
             # Package the resulting Linux/macOS binary
