@@ -70,16 +70,30 @@ jobs:
                 echo $PATH
               if: matrix.os == 'windows-latest'
                    
-            # Configure
+            # Configure (windows)
+            - name: Configure
+              shell: msys2 {0}
+              run: ./config
+              if: matrix.os == 'windows-latest'
+
+            # Configure (linux/macos)
             - name: Configure
               shell: bash
               run: ./config
+              if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
+            
+            # Make (windows)
+            - name: Make
+              shell: msys2 {0}
+              run: make
+              if: matrix.os == 'windows-latest'
 
-            # Make
+            # Make (linux/macos)
             - name: Make
               shell: bash
               run: make
- 
+              if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
+            
             # Get lates (draft) release
             - id: own_release
               uses: pozetroninc/github-action-get-latest-release@master
