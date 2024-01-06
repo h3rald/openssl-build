@@ -46,6 +46,12 @@ jobs:
               run: sudo apt-get install -y musl-tools
               if: matrix.os == 'ubuntu-latest'
 
+            # Installs Locale/Maketest/Simple
+            - name: install locale/maketest/simple (Windows)
+              run: pacman -S mingw-w64-ucrt-x86_64-perl-locale-maketext-simple
+              shell: bash
+              if: matrix.os == 'windows-latest'
+
             # Configure
             - name: Configure
               shell: bash
