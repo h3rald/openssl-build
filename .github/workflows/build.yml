@@ -57,7 +57,7 @@ jobs:
                 install: >-
                   base-devel
                   autotools
-                  mingw-w64-ucrt-x86_64-perl-locale-maketext-simple
+                  mingw-w64-x86_64-perl-locale-maketext
                   mingw-w64-x86_64-toolchain
                   mingw-w64-x86_64-autotools
                   
