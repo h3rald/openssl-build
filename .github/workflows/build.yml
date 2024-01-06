@@ -50,7 +50,7 @@ jobs:
               if: matrix.os == 'windows-latest'
               uses: msys2/setup-msys2@v2
               with:
-                msystem: MINGW${{ matrix.bit }}
+                msystem: MINGW64
                 path-type: inherit
                 release: true
                 update: true
@@ -58,8 +58,8 @@ jobs:
                   base-devel
                   autotools
                   mingw-w64-ucrt-x86_64-perl-locale-maketext-simple
-                  mingw-w64-${{ matrix.arch }}-toolchain
-                  mingw-w64-${{ matrix.arch }}-autotools
+                  mingw-w64-x86_64-toolchain
+                  mingw-w64-x86_64-autotools
                   
             - name: Run MSYS2 once
               shell: msys2 {0}
