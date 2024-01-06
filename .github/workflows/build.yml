@@ -9,6 +9,9 @@ jobs:
     release:
         name: "Build and upload artifacts"
         runs-on: ${{ matrix.os }}
+        defaults:
+          run:
+            shell: msys2 {0}
         strategy:
             matrix:
                 os:
@@ -49,17 +52,14 @@ jobs:
             # Installs Locale/Maketest/Simple
             - name: install locale/maketest/simple (Windows)
               run: pacman -S mingw-w64-ucrt-x86_64-perl-locale-maketext-simple
-              shell: bash
               if: matrix.os == 'windows-latest'
 
             # Configure
             - name: Configure
-              shell: bash
               run: ./config
 
             # Make
             - name: Make
-              shell: bash
               run: make
  
             # Get lates (draft) release
