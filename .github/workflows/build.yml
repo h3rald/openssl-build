@@ -1,0 +1,87 @@
+name: Build & Upload
+
+# Controls when the action will run.
+on:
+    # Allows you to run this workflow manually from the Actions tab
+    workflow_dispatch:
+
+jobs:
+    release:
+        name: "Build and upload artifacts"
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                os:
+                    - ubuntu-latest
+                    - macos-latest
+                    - windows-latest
+        steps:
+            # Cancel other actions of the same type that might be already running
+            - name: "Cancel similar actions in progress"
+              uses: styfle/cancel-workflow-action@0.9.1
+              with:
+                  access_token: ${{ github.token }}
+                  
+            # Detects OS and provide Nim-friendly OS identifiers
+            - name: Detect current OS
+              id: os
+              run:  echo "os=${{matrix.os == 'ubuntu-latest' && 'linux' || matrix.os == 'macos-latest' && 'macosx' || matrix.os == 'windows-latest' && 'windows'}}" >> $GITHUB_OUTPUT
+
+            # Get latest OpenSSL release
+            - id: release
+              uses: pozetroninc/github-action-get-latest-release@master
+              with:
+                owner: openssl
+                repo: openssl
+                excludes: prerelease, draft
+
+            # Checks out the repository
+            - uses: actions/checkout@v4
+              with:
+                repository: openssl/openssl
+                ref: ${{ steps.release.outputs.release }}
+
+            # Installs libraries
+            - name: install musl-gcc
+              run: sudo apt-get install -y musl-tools
+              if: matrix.os == 'ubuntu-latest'
+
+            # Configure
+            - name: Configure
+              shell: bash
+              run: ./config
+
+            # Make
+            - name: Make
+              shell: bash
+              run: make
+ 
+            # Get lates (draft) release
+            - id: own_release
+              uses: pozetroninc/github-action-get-latest-release@master
+              with:
+                owner: h3rald
+                repo: openssl-build
+                excludes: release
+
+            # Package the resulting Linux/macOS binary
+            - name: Create artifact (Linux, macOS)
+              run: zip ${{steps.release.outputs.tag_name}}_${{steps.os.outputs.os}}_x64.zip *.a
+              if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
+              
+            # Package the resulting Windows binary
+            - name: Create artifact (Windows)
+              run: Compress-Archive -Path *.a -DestinationPath min_${{steps.release.outputs.tag_name}}_windows_x64.zip
+              if: matrix.os == 'windows-latest'
+
+            # Upload artifacts to current draft release
+            - name: "Upload to current release"
+              uses: xresloader/upload-to-github-release@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  file: "min_v*.zip"
+                  overwrite: true
+                  tag_name: ${{steps.own_release.outputs.release}}
+                  release_id: ${{steps.own_release.outputs.id }}
+                  verbose: true
