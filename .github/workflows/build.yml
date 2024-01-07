@@ -83,7 +83,7 @@ jobs:
             # Configure (macos)
             - name: Configure
               shell: bash
-              run: ./Configure no-asm no-shared no-async
+              run: CC=clang && ./Configure no-asm no-shared no-async
               if: matrix.os == 'macos-latest'
 
             # Configure (linux)
