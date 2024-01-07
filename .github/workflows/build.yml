@@ -133,6 +133,6 @@ jobs:
               with:
                   file: "openssl*.zip"
                   overwrite: true
-                  tag_name: ${{steps.last_release.outputs.tag_name}}
-                  release_id: ${{steps.last_release.outputs.id }}
+                  tag_name: ${{steps.release.outputs.release}}
+                  update_latest_release: true
                   verbose: true
