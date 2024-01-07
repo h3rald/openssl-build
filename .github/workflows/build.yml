@@ -77,14 +77,20 @@ jobs:
             # Configure (windows)
             - name: Configure
               shell: msys2 {0}
-              run: export PATH=/usr/bin:$PATH && ./Configure mingw64 no-asm no-shared
+              run: export PATH=/usr/bin:$PATH && ./Configure mingw64 no-asm no-shared no-async
               if: matrix.os == 'windows-latest'
 
-            # Configure (linux/macos)
+            # Configure (macos)
             - name: Configure
               shell: bash
-              run: ./Configure no-asm no-shared
-              if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
+              run: ./Configure no-asm no-shared no-async
+              if: matrix.os == 'macos-latest'
+
+            # Configure (linux)
+            - name: Configure
+              shell: bash
+              run: CC="musl-gcc -fPIE -pie -static -idirafter /usr/include/ -idirafter /usr/include/x86_64-linux-gnu/" ./Configure no-asm no-shared no-async
+              if: matrix.os == 'ubuntu-latest'
             
             # Make (windows)
             - name: Make
