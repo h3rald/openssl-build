@@ -95,13 +95,14 @@ jobs:
               run: make
               if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
             
-            # Get lates (draft) release
-            - id: own_release
-              uses: pozetroninc/github-action-get-latest-release@master
+            # Retrieve ID and Name of the current (draft) release
+            - name: "Get current release"
+              id: current_release
+              uses: InsonusK/get-latest-release@v1.0.1
               with:
-                owner: h3rald
-                repo: openssl-build
-                token: ${{ secrets.GITHUB_TOKEN }}
+                  myToken: ${{ github.token }}
+                  exclude_types: "release"
+                  view_top: 1
 
             # Package the resulting Linux/macOS binary
             - name: Create artifact (Linux, macOS)
@@ -121,6 +122,6 @@ jobs:
               with:
                   file: "openssl*.zip"
                   overwrite: true
-                  tag_name: ${{steps.own_release.outputs.release}}
-                  release_id: ${{steps.own_release.outputs.id }}
+                  tag_name: ${{steps.current_release.outputs.tag_name}}
+                  release_id: ${{steps.current_release.outputs.id }}
                   verbose: true
