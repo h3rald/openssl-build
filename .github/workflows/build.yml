@@ -91,8 +91,12 @@ jobs:
               run: CC="musl-gcc -fPIE -pie -static -idirafter /usr/include/ -idirafter /usr/include/x86_64-linux-gnu/" ./Configure no-asm no-shared no-async
               if: matrix.os == 'ubuntu-latest'
             
-            # Make (windows)
-            - name: Make
+            # Enable dev prompt (windows)
+            - uses: ilammy/msvc-dev-cmd@v1
+              if: matrix.os == 'windows-latest'
+
+            # NMake (windows)
+            - name: NMake
               run: nmake
               if: matrix.os == 'windows-latest'
 
