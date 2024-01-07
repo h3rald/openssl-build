@@ -97,12 +97,23 @@ jobs:
             
             # Retrieve ID and Name of the current (draft) release
             - name: "Get current release"
-              id: current_release
+              id: last_release
               uses: InsonusK/get-latest-release@v1.0.1
               with:
                   myToken: ${{ github.token }}
                   exclude_types: "release"
                   view_top: 1
+
+            - name: "Print result"
+              run: |
+                echo "id: ${{ steps.last_release.outputs.id }}"
+                echo "name: ${{ steps.last_release.outputs.name }}"
+                echo "tag_name: ${{ steps.last_release.outputs.tag_name }}"
+                echo "created_at: ${{ steps.last_release.outputs.created_at }}"
+                echo "draft: ${{ steps.last_release.outputs.draft }}"
+                echo "prerelease: ${{ steps.last_release.outputs.prerelease }}"
+                echo "url: ${{ steps.last_release.outputs.url }}"
+                echo "html_url: ${{ steps.last_release.outputs.html_url }}"
 
             # Package the resulting Linux/macOS binary
             - name: Create artifact (Linux, macOS)
@@ -122,6 +133,6 @@ jobs:
               with:
                   file: "openssl*.zip"
                   overwrite: true
-                  tag_name: ${{steps.current_release.outputs.tag_name}}
-                  release_id: ${{steps.current_release.outputs.id }}
+                  tag_name: ${{steps.last_release.outputs.tag_name}}
+                  release_id: ${{steps.last_release.outputs.id }}
                   verbose: true
