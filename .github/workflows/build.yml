@@ -77,7 +77,7 @@ jobs:
             # Configure (windows)
             - name: Configure
               shell: msys2 {0}
-              run: export PATH=/usr/bin:$PATH && ./Configure mingw64 no-asm no-shared no-async
+              run: export PATH=/usr/bin:$PATH && export CC=clang && ./Configure mingw64 no-asm no-shared no-async
               if: matrix.os == 'windows-latest'
 
             # Configure (macos)
