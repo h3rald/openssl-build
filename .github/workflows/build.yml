@@ -93,8 +93,7 @@ jobs:
             
             # Make (windows)
             - name: Make
-              shell: msys2 {0}
-              run: export PATH=/usr/bin:$PATH && nmake
+              run: nmake
               if: matrix.os == 'windows-latest'
 
             # Make (linux/macos)
