@@ -105,7 +105,7 @@ jobs:
               
             # Package the resulting Windows binary
             - name: Create artifact (Windows)
-              run: Compress-Archive -Path *.a -DestinationPath min_${{steps.release.outputs.release}}_windows_x64.zip
+              run: Compress-Archive -Path *.a -DestinationPath ${{steps.release.outputs.release}}_windows_x64.zip
               if: matrix.os == 'windows-latest'
 
             # Upload artifacts to current draft release
