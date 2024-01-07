@@ -77,7 +77,7 @@ jobs:
             # Configure (windows)
             - name: Configure
               shell: msys2 {0}
-              run: export PATH=/usr/bin:$PATH && ./Configure mingw64 no-asm no-shared no-async
+              run: export PATH=/usr/bin:$PATH && ./Configure VC-WIN64A no-asm no-shared no-async
               if: matrix.os == 'windows-latest'
 
             # Configure (macos)
@@ -95,7 +95,7 @@ jobs:
             # Make (windows)
             - name: Make
               shell: msys2 {0}
-              run: export PATH=/usr/bin:$PATH && make
+              run: export PATH=/usr/bin:$PATH && nmake
               if: matrix.os == 'windows-latest'
 
             # Make (linux/macos)
