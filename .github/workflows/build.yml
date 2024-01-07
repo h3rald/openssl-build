@@ -51,7 +51,7 @@ jobs:
               if: matrix.os == 'ubuntu-latest'
             
             - name: Setup Msys2
-              if: matrix.os == 'windows-latest'
+              if: matrix.os == 'windows-latest_EXCLUDE'
               uses: msys2/setup-msys2@v2
               with:
                 msystem: MINGW64
@@ -72,12 +72,11 @@ jobs:
                 echo $MSYSTEM
                 echo $MSYS2_PATH_TYPE
                 echo $PATH
-              if: matrix.os == 'windows-latest'
+              if: matrix.os == 'windows-latest_EXCLUDE'
                    
             # Configure (windows)
             - name: Configure
-              shell: msys2 {0}
-              run: export PATH=/usr/bin:$PATH && ./Configure VC-WIN64A no-asm no-shared no-async
+              run: perl Configure VC-WIN64A no-asm no-shared no-async
               if: matrix.os == 'windows-latest'
 
             # Configure (macos)
