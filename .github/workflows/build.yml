@@ -51,7 +51,7 @@ jobs:
               if: matrix.os == 'ubuntu-latest'
             
             - name: Setup Msys2
-              if: matrix.os == 'windows-latest_EXCLUDE'
+              if: matrix.os == 'windows-latest'
               uses: msys2/setup-msys2@v2
               with:
                 msystem: MINGW64
@@ -72,11 +72,12 @@ jobs:
                 echo $MSYSTEM
                 echo $MSYS2_PATH_TYPE
                 echo $PATH
-              if: matrix.os == 'windows-latest_EXCLUDE'
+              if: matrix.os == 'windows-latest'
                    
             # Configure (windows)
             - name: Configure
-              run: perl Configure VC-WIN64A no-asm no-shared no-async
+              shell: msys2 {0}
+              run: export PATH=/usr/bin:$PATH && ./Configure mingw64 no-asm no-shared no-async
               if: matrix.os == 'windows-latest'
 
             # Configure (macos)
@@ -91,18 +92,10 @@ jobs:
               run: CC="musl-gcc -fPIE -pie -static -idirafter /usr/include/ -idirafter /usr/include/x86_64-linux-gnu/" ./Configure no-asm no-shared no-async
               if: matrix.os == 'ubuntu-latest'
             
-            # Enable dev prompt (windows)
-            - uses: ilammy/msvc-dev-cmd@v1
-              if: matrix.os == 'windows-latest'
-
-            # NMake (windows)
-            - name: NMake
-              run: nmake
-              if: matrix.os == 'windows-latest'
-
-            # Rename files (windows)
-            - name: Rename files
-              run: ls && mv libssl.lib libssl.a && mv libcrypto.lib libcrypto.a
+            # Make (windows)
+            - name: Make
+              shell: msys2 {0}
+              run: export PATH=/usr/bin:$PATH && make
               if: matrix.os == 'windows-latest'
 
             # Make (linux/macos)
