@@ -74,7 +74,7 @@ jobs:
             # Configure (windows)
             - name: Configure
               shell: msys2 {0}
-              run: ./Configure mingw64 no-asm no-shared
+              run: export PATH=/usr/bin:$PATH && ./Configure mingw64 no-asm no-shared
               if: matrix.os == 'windows-latest'
 
             # Configure (linux/macos)
@@ -86,7 +86,7 @@ jobs:
             # Make (windows)
             - name: Make
               shell: msys2 {0}
-              run: make
+              run: export PATH=/usr/bin:$PATH && make
               if: matrix.os == 'windows-latest'
 
             # Make (linux/macos)
