@@ -100,6 +100,11 @@ jobs:
               run: nmake
               if: matrix.os == 'windows-latest'
 
+            # Rename files (windows)
+            - name: Rename files
+              run: ls && mv libssl.lib libssl.a && mv libcrypto.lib libcrypto.a
+              if: matrix.os == 'windows-latest'
+
             # Make (linux/macos)
             - name: Make
               shell: bash
